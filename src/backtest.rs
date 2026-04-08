@@ -17,11 +17,13 @@ pub struct BacktestResult {
     pub candle_win_rate: f64,
     pub pattern_windows: usize,
     pub pattern_wins: usize,
+    pub pattern_losses: usize,
     pub pattern_win_rate: f64,
     pub max_consecutive_losses: usize,
     pub win_loss_ratio: f64,
     pub first_match_attempts: usize,
     pub first_match_wins: usize,
+    pub first_match_losses: usize,
     pub first_match_win_rate: f64,
     pub first_match_max_consec_losses: usize,
     pub first_match_max_consec_losses_count: usize,
@@ -36,11 +38,13 @@ impl std::fmt::Display for BacktestResult {
         writeln!(f, "  Candle win rate       : {:.2}%", self.candle_win_rate * 100.0)?;
         writeln!(f, "  Pattern windows       : {}", self.pattern_windows)?;
         writeln!(f, "  Pattern wins          : {}", self.pattern_wins)?;
+        writeln!(f, "  Pattern losses        : {}", self.pattern_losses)?;
         writeln!(f, "  Pattern win rate      : {:.2}%", self.pattern_win_rate * 100.0)?;
         writeln!(f, "  Max consec. losses    : {}", self.max_consecutive_losses)?;
         writeln!(f, "  Win/Loss ratio        : {:.2}", self.win_loss_ratio)?;
         writeln!(f, "  First match attempts  : {}", self.first_match_attempts)?;
         writeln!(f, "  First match wins      : {}", self.first_match_wins)?;
+        writeln!(f, "  First match losses    : {}", self.first_match_losses)?;
         writeln!(f, "  First match win rate  : {:.2}%", self.first_match_win_rate * 100.0)?;
         writeln!(f, "  First match max c.loss: {}", self.first_match_max_consec_losses)?;
         writeln!(f, "  First match max c.loss count: {}", self.first_match_max_consec_losses_count)?;
@@ -95,6 +99,7 @@ pub fn backtest(pattern: &[CandleColor], actual: &[CandleColor], occurrences: u3
             pattern_wins += 1;
         }
     }
+    let pattern_losses = pattern_windows - pattern_wins;
 
     let candle_win_rate = if total > 0 {
         wins as f64 / total as f64
@@ -158,11 +163,13 @@ pub fn backtest(pattern: &[CandleColor], actual: &[CandleColor], occurrences: u3
         candle_win_rate,
         pattern_windows,
         pattern_wins,
+        pattern_losses,
         pattern_win_rate,
         max_consecutive_losses,
         win_loss_ratio,
         first_match_attempts,
         first_match_wins,
+        first_match_losses: first_match_attempts - first_match_wins,
         first_match_win_rate,
         first_match_max_consec_losses,
         first_match_max_consec_losses_count,
