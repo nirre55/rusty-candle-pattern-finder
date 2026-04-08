@@ -1,0 +1,9 @@
+symbol = "BTCUSDT"
+interval = "5m"
+pattern_min_length = 2
+pattern_max_length = 6
+
+# Optional: restrict date range (format: "YYYY-MM-DD")
+# Omit or comment out to download the full history
+start_date = "2026-01-01"
+end_date = "2026-04-01"
