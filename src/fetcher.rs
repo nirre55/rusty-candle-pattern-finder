@@ -6,8 +6,10 @@ use crate::error::{AppError, Result};
 const BINANCE_API: &str = "https://api.binance.com/api/v3/klines";
 const BATCH_LIMIT: u16 = 1000;
 
-pub fn csv_path(symbol: &str, interval: &str) -> PathBuf {
-    PathBuf::from(format!("data/{symbol}_{interval}.csv"))
+pub fn csv_path(symbol: &str, interval: &str, start: Option<i64>, end: Option<i64>) -> PathBuf {
+    let start_tag = start.map_or_else(|| "all".to_owned(), |s| s.to_string());
+    let end_tag = end.map_or_else(|| "now".to_owned(), |e| e.to_string());
+    PathBuf::from(format!("data/{symbol}_{interval}_{start_tag}_{end_tag}.csv"))
 }
 
 pub async fn fetch_all_candles(
@@ -16,7 +18,7 @@ pub async fn fetch_all_candles(
     config_start: Option<i64>,
     config_end: Option<i64>,
 ) -> Result<Vec<Candle>> {
-    let path = csv_path(symbol, interval);
+    let path = csv_path(symbol, interval, config_start, config_end);
 
     // Resume from last candle if CSV exists
     let resumed_start = load_last_close_time(&path).map(|t| {

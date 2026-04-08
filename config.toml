@@ -5,5 +5,5 @@ pattern_max_length = 6
 
 # Optional: restrict date range (format: "YYYY-MM-DD")
 # Omit or comment out to download the full history
-start_date = "2026-01-01"
+start_date = "2020-01-01"
 end_date = "2026-04-01"
